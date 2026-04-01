@@ -9,7 +9,11 @@ EditorUserSettings:
       value: 5a08575f5207595a0f5d59741173094444164f7d7d2a23317c7a4465bbe1646d
       flags: 0
     RecentlyUsedSceneGuid-1:
+<<<<<<< HEAD
       value: 5a040d0000505e59590d547b1473594446154f797f2a723474704f36b3b8303b
+=======
+      value: 5657005057535e590c0c5e27447b064443164b792f7b72327e701c35e6e5636a
+>>>>>>> feature/testNikodem
       flags: 0
     lightmappingBakingProfile:
       value: 51
