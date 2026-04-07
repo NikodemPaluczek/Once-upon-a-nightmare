@@ -2,17 +2,20 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager instance;
+    public static PlayerManager Instance;
+
+    private IInteractable currentInteractable;
+
 
     [SerializeField] private Transform holdPoint;
     [SerializeField] private float interactDistance = 3f;
 
-    private PickableObject currentObject;
+    public IPickableObject CurrentObject;
 
     private void OnEnable()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance == null)
+            Instance = this;
         else
             Destroy(this);
     }
@@ -23,6 +26,36 @@ public class PlayerManager : MonoBehaviour
 
         HandleInteraction();
         HandleObjectRotation();
+        CheckRayForHighlight();
+    }
+
+    private void CheckRayForHighlight()
+    {
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
+        {
+            IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
+
+            if (interactable != currentInteractable)
+            {
+                if (currentInteractable != null)
+                    currentInteractable.SetHighlight(false);
+
+                currentInteractable = interactable;
+
+                if (currentInteractable != null)
+                    currentInteractable.SetHighlight(true);
+            }
+
+            return;
+        }
+
+        if (currentInteractable != null)
+        {
+            currentInteractable.SetHighlight(false);
+            currentInteractable = null;
+        }
     }
 
     private void FixedUpdate()
@@ -41,10 +74,10 @@ public class PlayerManager : MonoBehaviour
         InputManager.Instance.InteractPressed = false;
 
         // if we r holding smth then we drop
-        if (currentObject != null)
+        if (CurrentObject != null)
         {
-            currentObject.OnDrop();
-            currentObject = null;
+            CurrentObject.OnDrop();
+            CurrentObject = null;
 
             InputManager.Instance.EnablePlayerControls();
             return;
@@ -55,12 +88,12 @@ public class PlayerManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
         {
-            PickableObject pickable = hit.collider.GetComponent<PickableObject>();
+            IPickableObject pickable = hit.collider.GetComponent<IPickableObject>();
 
             if (pickable != null)
             {
-                currentObject = pickable;
-                currentObject.OnPick(holdPoint);
+                CurrentObject = pickable;
+                CurrentObject.OnPick(holdPoint);
 
                 InputManager.Instance.EnableObjectControls();
             }
@@ -69,8 +102,8 @@ public class PlayerManager : MonoBehaviour
 
     private void HandleObjectRotation()
     {
-        if (currentObject == null) return;
+        if (CurrentObject == null) return;
 
-        currentObject.Rotate(InputManager.Instance.RotateInput);
+        CurrentObject.Rotate(InputManager.Instance.RotateInput);
     }
 }

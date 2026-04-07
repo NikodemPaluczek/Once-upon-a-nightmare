@@ -82,6 +82,7 @@ public class InputManager : MonoBehaviour
 
         inputActions.PickableObject.Disable();
         inputActions.Player.Enable();
+        inputActions.Interaction.Enable();
     }
 
     public void EnableObjectControls()
@@ -90,5 +91,24 @@ public class InputManager : MonoBehaviour
 
         inputActions.Player.Disable();
         inputActions.PickableObject.Enable();
+    }
+    public void DisableAllControls()
+    {
+        IsInObjectMode = false;
+
+        inputActions.Player.Disable();
+        inputActions.PickableObject.Disable();
+        inputActions.Interaction.Disable();
+
+        movementInput = Vector2.zero;
+        lookInput = Vector2.zero;
+        rotateInput = Vector2.zero;
+
+        VerticalInput = 0;
+        HorizontalInput = 0;
+        LookX = 0;
+        LookY = 0;
+
+        InteractPressed = false;
     }
 }
