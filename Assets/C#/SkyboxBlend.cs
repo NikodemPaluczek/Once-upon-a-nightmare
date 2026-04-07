@@ -7,12 +7,12 @@ public class SkyboxSleepBlend : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnSleepStateChanged += HandleSleep;
+        SleepManager.OnSleepStateChanged += HandleSleep;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnSleepStateChanged -= HandleSleep;
+        SleepManager.OnSleepStateChanged -= HandleSleep;
     }
 
     private void HandleSleep(bool isSleeping)
