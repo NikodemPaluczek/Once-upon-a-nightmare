@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Book : MonoBehaviour, IInteractable
+public class Book : MonoBehaviour, IHighlightable
 {
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Renderer targetRenderer;

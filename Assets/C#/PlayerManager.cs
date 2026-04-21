@@ -1,14 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
 
-    private IInteractable currentInteractable;
+    private IHighlightable currentInteractable;
 
 
     [SerializeField] private Transform holdPoint;
     [SerializeField] private float interactDistance = 3f;
+
 
     public IPickableObject CurrentObject;
 
@@ -35,7 +37,8 @@ public class PlayerManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
         {
-            IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
+            IHighlightable interactable = hit.collider.GetComponentInParent<IHighlightable>();
+            FireplaceButton fireplaceButton = hit.collider.GetComponent<FireplaceButton>();
 
             if (interactable != currentInteractable)
             {
@@ -47,8 +50,11 @@ public class PlayerManager : MonoBehaviour
                 if (currentInteractable != null)
                     currentInteractable.SetHighlight(true);
             }
-
-            return;
+            else
+            {
+                GridFireplaceManager.Instance.ManageRaycast(fireplaceButton);
+            }
+                return;
         }
 
         if (currentInteractable != null)

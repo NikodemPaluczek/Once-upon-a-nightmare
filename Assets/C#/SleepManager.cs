@@ -1,9 +1,13 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SleepManager : MonoBehaviour
 {
+    [SerializeField] private GameObject[] sleepObjects;
+    [SerializeField] private GameObject[] awakeObjects;
+
     public static SleepManager Instance;
 
     public static Action<bool> OnSleepStateChanged;
@@ -16,6 +20,7 @@ public class SleepManager : MonoBehaviour
         {
             Instance = this;
         }
+        OnSleepStateChanged += SwapObjects;
     }
     private void Update()
     {
@@ -40,7 +45,18 @@ public class SleepManager : MonoBehaviour
     public void ChangeSleepState()
     {
         _isSleeping = !_isSleeping;
-
         StartCoroutine(TriggerSleepState(_isSleeping));
+    }
+    private void SwapObjects(bool isSleeping)
+    {
+        foreach (GameObject sleepObj  in sleepObjects)
+        {
+            sleepObj.SetActive(isSleeping);
+        }
+        foreach (GameObject awakeObj in awakeObjects)
+        {
+            awakeObj.SetActive(!isSleeping);
+        }
+
     }
 }
