@@ -25,15 +25,15 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         PlayerLocomotion.Instance.ManageRotation();
-
+        CheckRayForHighlight();
         HandleInteraction();
         HandleObjectRotation();
-        CheckRayForHighlight();
+        
     }
 
     private void CheckRayForHighlight()
     {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
         {
@@ -49,10 +49,6 @@ public class PlayerManager : MonoBehaviour
 
                 if (currentInteractable != null)
                     currentInteractable.Highlight(true);
-            }
-            else
-            {
-                GridFireplaceManager.Instance.ManageRaycast(fireplaceButton);
             }
                 return;
         }

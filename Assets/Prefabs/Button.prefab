@@ -90,6 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightColor: {r: 0.4792453, g: 0.4792453, b: 0.4792453, a: 1}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
 --- !u!65 &7701562711305251763
 BoxCollider:
   m_ObjectHideFlags: 0
