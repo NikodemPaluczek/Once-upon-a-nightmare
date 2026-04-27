@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Book : MonoBehaviour, IHighlightable
+public class Book : MonoBehaviour, IHighlightable, IInteractable
 {
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Renderer targetRenderer;
@@ -49,6 +49,39 @@ public class Book : MonoBehaviour, IHighlightable
             }
                 canvasGameObject.SetActive(_shouldShow);
             _shouldShow = !_shouldShow;
+        }
+    }
+
+    public void Interact()
+    {
+        if (_shouldShow)
+        {
+            InputManager.Instance.DisableAllControls();
+        }
+        else
+        {
+            InputManager.Instance.EnablePlayerControls();
+        }
+        canvasGameObject.SetActive(_shouldShow);
+        _shouldShow = !_shouldShow;
+    }
+
+    public void Highlight(bool state)
+    {
+        if (state)
+        {
+            var mats = rend.sharedMaterials;
+
+            Material[] newMats = new Material[mats.Length];
+
+            for (int i = 0; i < newMats.Length; i++)
+                newMats[i] = highlightMaterial;
+
+            rend.materials = newMats;
+        }
+        else
+        {
+            rend.materials = original;
         }
     }
 }
