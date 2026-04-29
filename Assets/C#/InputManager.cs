@@ -25,13 +25,15 @@ public class InputManager : MonoBehaviour
 
     public bool IsInObjectMode;
 
+    // CROUCH
+    public bool CrouchHeld;
 
     private void Start()
     {
-        //hide cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
     private void Awake()
     {
         if (Instance == null)
@@ -52,6 +54,10 @@ public class InputManager : MonoBehaviour
 
             inputActions.Player.Look.performed += i => lookInput = i.ReadValue<Vector2>();
             inputActions.Player.Look.canceled += i => lookInput = Vector2.zero;
+
+            // crouch map
+            inputActions.Player.Crouch.performed += i => CrouchHeld = true;
+            inputActions.Player.Crouch.canceled += i => CrouchHeld = false;
 
             // object map
             inputActions.PickableObject.Rotate.performed += i => rotateInput = i.ReadValue<Vector2>();
@@ -92,6 +98,7 @@ public class InputManager : MonoBehaviour
         inputActions.Player.Disable();
         inputActions.PickableObject.Enable();
     }
+
     public void DisableAllControls()
     {
         IsInObjectMode = false;
@@ -110,5 +117,6 @@ public class InputManager : MonoBehaviour
         LookY = 0;
 
         InteractPressed = false;
+        CrouchHeld = false; // DODANE
     }
 }

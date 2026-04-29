@@ -65,6 +65,7 @@ public class PlayerManager : MonoBehaviour
         if (!InputManager.Instance.IsInObjectMode)
         {
             PlayerLocomotion.Instance.ManageMovement();
+            PlayerLocomotion.Instance.ManageCrouch();
         }
     }
 
