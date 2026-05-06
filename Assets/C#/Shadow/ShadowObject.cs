@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ShadowmaticObject : MonoBehaviour, IPickableObject, IInteractable
+public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
 {
     private Rigidbody _rb;
 
@@ -9,22 +9,22 @@ public class ShadowmaticObject : MonoBehaviour, IPickableObject, IInteractable
     [SerializeField] private Transform lookTarget;
 
     [SerializeField] private Renderer targetRenderer;
-    [SerializeField] private Material highlightMaterial;
 
-    private Material[] originalMaterials;
+    [SerializeField] private float rotationSpeed = 150f;
+    [SerializeField] private Vector3 targetEuler;
+    [SerializeField] private float tolerance = 10f;
 
     private bool _isPicked;
     private bool _canBeHighlighted = true;
 
-    [SerializeField] private float rotationSpeed = 150f;
-
-    [SerializeField] private Vector3 targetEuler;
-    [SerializeField] private float tolerance = 10f;
+    private uint _defaultLayerMask = 1u << 0;
+    private uint _outlineLayerMask = 1u << 8;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        originalMaterials = targetRenderer.sharedMaterials;
+
+        _defaultLayerMask = targetRenderer.renderingLayerMask;
     }
 
     public void Interact()
@@ -120,18 +120,15 @@ public class ShadowmaticObject : MonoBehaviour, IPickableObject, IInteractable
 
     public void Highlight(bool state)
     {
-        if (state && _canBeHighlighted)
+        if (!_canBeHighlighted) return;
+
+        if (state)
         {
-            Material[] mats = new Material[targetRenderer.sharedMaterials.Length];
-
-            for (int i = 0; i < mats.Length; i++)
-                mats[i] = highlightMaterial;
-
-            targetRenderer.materials = mats;
+            targetRenderer.renderingLayerMask = _defaultLayerMask | _outlineLayerMask;
         }
         else
         {
-            targetRenderer.materials = originalMaterials;
+            targetRenderer.renderingLayerMask = _defaultLayerMask;
         }
     }
 }

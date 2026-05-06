@@ -1,58 +1,35 @@
 using UnityEngine;
 
-public class Book : MonoBehaviour, IHighlightable, IInteractable
+public class Book : MonoBehaviour, IInteractable
 {
-    [SerializeField] private Material highlightMaterial;
     [SerializeField] private Renderer targetRenderer;
 
-    private Renderer rend;
-    private Material[] original;
-
     [SerializeField] private GameObject canvasGameObject;
+
     private bool _shouldShow = true;
 
+    private uint _defaultMask;
+    private uint _outlineMask = 1u << 8;
 
     private void Awake()
     {
-        rend = targetRenderer;
-        original = rend.sharedMaterials;
+        _defaultMask = targetRenderer.renderingLayerMask;
     }
-    public void SetHighlight(bool state)
-    {
-        if (state)
-        {
-            var mats = rend.sharedMaterials;
 
-            Material[] newMats = new Material[mats.Length];
-
-            for (int i = 0; i < newMats.Length; i++)
-                newMats[i] = highlightMaterial;
-
-            rend.materials = newMats;
-        }
-        else
-        {
-            rend.materials = original;
-        }
-    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            if (_shouldShow)
-            {
-                InputManager.Instance.DisableAllControls();
-            }
-            else
-            {
-                InputManager.Instance.EnablePlayerControls();
-            }
-                canvasGameObject.SetActive(_shouldShow);
-            _shouldShow = !_shouldShow;
+            ToggleBook();
         }
     }
 
     public void Interact()
+    {
+        ToggleBook();
+    }
+
+    private void ToggleBook()
     {
         if (_shouldShow)
         {
@@ -62,6 +39,7 @@ public class Book : MonoBehaviour, IHighlightable, IInteractable
         {
             InputManager.Instance.EnablePlayerControls();
         }
+
         canvasGameObject.SetActive(_shouldShow);
         _shouldShow = !_shouldShow;
     }
@@ -70,18 +48,11 @@ public class Book : MonoBehaviour, IHighlightable, IInteractable
     {
         if (state)
         {
-            var mats = rend.sharedMaterials;
-
-            Material[] newMats = new Material[mats.Length];
-
-            for (int i = 0; i < newMats.Length; i++)
-                newMats[i] = highlightMaterial;
-
-            rend.materials = newMats;
+            targetRenderer.renderingLayerMask = _defaultMask | _outlineMask;
         }
         else
         {
-            rend.materials = original;
+            targetRenderer.renderingLayerMask = _defaultMask;
         }
     }
 }

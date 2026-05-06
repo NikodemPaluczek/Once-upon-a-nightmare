@@ -8,7 +8,7 @@ public class GridFireplaceManager : MonoBehaviour
     public static GridFireplaceManager Instance;
 
     [SerializeField] private int rows = 3;
-    [SerializeField] private int cols = 4;
+    [SerializeField] private int cols = 3;
 
     [SerializeField] private FireplaceButton[] allButtons;
 
@@ -16,7 +16,7 @@ public class GridFireplaceManager : MonoBehaviour
     private int[,] lockCount;
 
     private List<int> clickOrder = new List<int>();
-    private const int maxClicks = 3;
+    private int maxClicks = 3;
 
     private readonly int[] correctSequence = { 8, 0, 6 };
 

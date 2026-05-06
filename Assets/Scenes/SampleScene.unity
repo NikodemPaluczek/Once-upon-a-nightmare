@@ -1249,7 +1249,7 @@ GameObject:
   - component: {fileID: 137274387}
   - component: {fileID: 137274392}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1271,7 +1271,6 @@ MonoBehaviour:
   holdPoint: {fileID: 141627835}
   lookTarget: {fileID: 1922292238}
   targetRenderer: {fileID: 137274389}
-  highlightMaterial: {fileID: 2100000, guid: fba9a213eeee0e04fbc7f0c88cd28ad8, type: 2}
   rotationSpeed: 150
   targetEuler: {x: 45, y: 75, z: 90}
   tolerance: 15
@@ -3425,7 +3424,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: 1
+  m_RendererIndex: 2
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -13416,6 +13415,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1030256719794517415, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247650751551777460, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1255053967005034563, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
       propertyPath: m_Name
       value: VFX_Fire_Floor_02_Smoke
@@ -13476,6 +13483,18 @@ PrefabInstance:
       propertyPath: m_RenderAlignment
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1488298874332469529, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3008779727246249574, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354829073591693096, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4329884530432036869, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.06
@@ -13526,6 +13545,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4329884530432036869, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620036084813726311, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816843557187995623, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937515509642873366, guid: 982b091f07779d846ad915e29a06ddc8, type: 3}
+      propertyPath: m_RenderingLayerMask
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -23463,7 +23494,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16959a863e34ba641bb396871323dd51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 2100000, guid: fba9a213eeee0e04fbc7f0c88cd28ad8, type: 2}
   targetRenderer: {fileID: 1960539344}
   canvasGameObject: {fileID: 1794659787}
 --- !u!65 &1960539343
@@ -25658,6 +25688,10 @@ PrefabInstance:
       propertyPath: ColorModule.gradient.maxGradient.m_NumAlphaKeys
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 548362389489512242, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1781949194303238864, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
       propertyPath: looping
       value: 0
@@ -25731,7 +25765,19 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2310712263743608051, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2310712263743608051, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
       propertyPath: m_ApplyActiveColorSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836888380697916861, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4795224724292353107, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: m_RenderingLayerMask
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
