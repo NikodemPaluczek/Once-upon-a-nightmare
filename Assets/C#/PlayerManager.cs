@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private Transform holdPoint;
     [SerializeField] private float interactDistance = 3f;
+
 
     public IPickableObject CurrentObject;
 
@@ -23,37 +25,37 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         PlayerLocomotion.Instance.ManageRotation();
-
+        CheckRayForHighlight();
         HandleInteraction();
         HandleObjectRotation();
-        CheckRayForHighlight();
+        
     }
 
     private void CheckRayForHighlight()
     {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
         {
             IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
+            FireplaceButton fireplaceButton = hit.collider.GetComponent<FireplaceButton>();
 
             if (interactable != currentInteractable)
             {
                 if (currentInteractable != null)
-                    currentInteractable.SetHighlight(false);
+                    currentInteractable.Highlight(false);
 
                 currentInteractable = interactable;
 
                 if (currentInteractable != null)
-                    currentInteractable.SetHighlight(true);
+                    currentInteractable.Highlight(true);
             }
-
-            return;
+                return;
         }
 
         if (currentInteractable != null)
         {
-            currentInteractable.SetHighlight(false);
+            currentInteractable.Highlight(false);
             currentInteractable = null;
         }
     }
@@ -63,6 +65,7 @@ public class PlayerManager : MonoBehaviour
         if (!InputManager.Instance.IsInObjectMode)
         {
             PlayerLocomotion.Instance.ManageMovement();
+            PlayerLocomotion.Instance.ManageCrouch();
         }
     }
 
@@ -73,31 +76,40 @@ public class PlayerManager : MonoBehaviour
 
         InputManager.Instance.InteractPressed = false;
 
-        // if we r holding smth then we drop
-        if (CurrentObject != null)
-        {
-            CurrentObject.OnDrop();
-            CurrentObject = null;
-
-            InputManager.Instance.EnablePlayerControls();
-            return;
-        }
-
-        // if not then we check if we can pick up
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
         {
-            IPickableObject pickable = hit.collider.GetComponent<IPickableObject>();
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
 
-            if (pickable != null)
-            {
-                CurrentObject = pickable;
-                CurrentObject.OnPick(holdPoint);
-
-                InputManager.Instance.EnableObjectControls();
-            }
+            interactable?.Interact();
         }
+        
+        // if we r holding smth then we drop
+        //if (CurrentObject != null)
+        //{
+        //    CurrentObject.OnDrop();
+        //    CurrentObject = null;
+        //
+        //    InputManager.Instance.EnablePlayerControls();
+        //    return;
+        //}
+        //
+        //// if not then we check if we can pick up
+        //Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        //
+        //if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
+        //{
+        //    IPickableObject pickable = hit.collider.GetComponent<IPickableObject>();
+        //
+        //    if (pickable != null)
+        //    {
+        //        CurrentObject = pickable;
+        //        CurrentObject.OnPick(holdPoint);
+        //
+        //        InputManager.Instance.EnableObjectControls();
+        //    }
+        //}
     }
 
     private void HandleObjectRotation()

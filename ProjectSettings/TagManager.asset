@@ -12,8 +12,8 @@ TagManager:
   - Pickup
   - Water
   - UI
-  - 
-  - 
+  - Awake
+  - Asleep
   - 
   - 
   - 
@@ -51,3 +51,4 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
+  - Outline

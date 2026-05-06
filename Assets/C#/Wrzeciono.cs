@@ -1,7 +1,7 @@
 using UnityEngine;
 using static UnityEngine.UI.Image;
 
-public class Wrzeciono : MonoBehaviour, IInteractable
+public class Wrzeciono : MonoBehaviour, IHighlightable
 {
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Renderer targetRenderer;

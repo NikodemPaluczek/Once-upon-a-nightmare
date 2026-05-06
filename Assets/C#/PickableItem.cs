@@ -3,7 +3,7 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class PickableItem : MonoBehaviour, IPickableObject, IInteractable
+public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
 {
     private Rigidbody _rb;
 

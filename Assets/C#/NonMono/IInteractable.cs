@@ -2,5 +2,6 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    void SetHighlight(bool state);
+    void Interact();
+    void Highlight(bool state);
 }
