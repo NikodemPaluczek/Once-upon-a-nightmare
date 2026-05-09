@@ -28,7 +28,7 @@ public class Book : MonoBehaviour, IInteractable
     {
         ToggleBook();
     }
-
+    //
     private void ToggleBook()
     {
         if (_shouldShow)
