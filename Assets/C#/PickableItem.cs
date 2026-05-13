@@ -3,7 +3,7 @@ using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
+public class PickableItem : MonoBehaviour, IPickableObject, IInteractable
 {
     private Rigidbody _rb;
 
@@ -32,6 +32,14 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
     private bool _canBeHighlighted = true;
 
     [SerializeField] private GameObject placeholdertext;
+
+
+    private uint _defaultMask;
+    private uint _outlineMask = 1u << 8;
+
+    [SerializeField] private Transform holdPoint;
+    [SerializeField] private Transform lookTarget;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -41,6 +49,8 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
 
         rend = targetRenderer;
         original = rend.sharedMaterials;
+
+        _defaultMask = targetRenderer.renderingLayerMask;
     }
     private void OnEnable()
     {
@@ -51,17 +61,34 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
         flames.SetActive(isSleeping);
     }
 
-    public void OnPick(Transform holdPoint)
+    public void OnPick(Transform point)
     {
         _isPicked = true;
 
         _rb.isKinematic = true;
         _rb.useGravity = false;
 
+        transform.SetParent(point);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+
         _canBeHighlighted = false;
-        SetHighlight(false);
+        Highlight(false);
         StartCoroutine(LerpBetweenPoints(holdPoint));
     }
+
+    public void OnDrop()
+    {
+        _isPicked = false;
+
+        transform.SetParent(null);
+
+        _rb.isKinematic = false;
+        _rb.useGravity = true;
+
+        _canBeHighlighted = true;
+    }
+
     private IEnumerator LerpBetweenPoints(Transform holdPoint)
     {
         transform.localRotation = Quaternion.identity;
@@ -82,20 +109,7 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
         transform.position = holdPoint.position;
         transform.SetParent(holdPoint);
     }
-    public void OnDrop()
-    {
-        _isPicked = false;
 
-        transform.SetParent(null);
-
-        transform.position = _startPosition;
-        transform.rotation = _startRotation;
-
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-
-        _canBeHighlighted = true;
-    }
 
     public void Rotate(Vector2 input)
     {
@@ -127,6 +141,9 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
             waxParticle.Play();
             InputManager.Instance.DisableAllControls();
             StartCoroutine(WaitforSeconds());
+            DoorManager.Instance.ShowNextObject();
+
+            _canBeHighlighted = false;
         }
     }
     private IEnumerator WaitforSeconds()
@@ -136,7 +153,19 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
         yield return new WaitForSeconds(1); //fade out duration
         DropAfterSolving();
         PlayerManager.Instance.CurrentObject = null;
+        InputManager.Instance.EnablePlayerControls();
+        PlayerLocomotion.Instance.CameraLocked = false;
 
+    }
+
+    private void LateUpdate()
+    {
+        if (_isPicked && lookTarget != null)
+        {
+            Vector3 dir = lookTarget.position - camera.position;
+            Quaternion rot = Quaternion.LookRotation(dir);
+            camera.rotation = Quaternion.Lerp(camera.rotation, rot, Time.deltaTime * 10f);
+        }
     }
     private void DropAfterSolving()
     {
@@ -149,25 +178,33 @@ public class PickableItem : MonoBehaviour, IPickableObject, IHighlightable
         placeholdertext.SetActive(true);
     }
 
-
-
-
-    public void SetHighlight(bool state)
+    public void Interact()
     {
-        if (state && _canBeHighlighted)
+        if (_isPicked)
         {
-            var mats = rend.sharedMaterials;
-
-            Material[] newMats = new Material[mats.Length];
-
-            for (int i = 0; i < newMats.Length; i++)
-                newMats[i] = highlightMaterial;
-
-            rend.materials = newMats;
+            OnDrop();
+            PlayerManager.Instance.CurrentObject = null;
+            InputManager.Instance.EnablePlayerControls();
+            PlayerLocomotion.Instance.CameraLocked = false;
         }
         else
         {
-            rend.materials = original;
+            OnPick(holdPoint);
+            PlayerManager.Instance.CurrentObject = this;
+            InputManager.Instance.EnableObjectControls();
+            PlayerLocomotion.Instance.CameraLocked = true;
+        }
+    }
+
+    public void Highlight(bool state)
+    {
+        if (state)
+        {
+            targetRenderer.renderingLayerMask = _defaultMask | _outlineMask;
+        }
+        else
+        {
+            targetRenderer.renderingLayerMask = _defaultMask;
         }
     }
 }

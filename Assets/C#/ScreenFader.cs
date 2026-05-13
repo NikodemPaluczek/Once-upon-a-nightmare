@@ -8,6 +8,8 @@ public class ScreenFader : MonoBehaviour
     [SerializeField] private Image fadeImage;
     [SerializeField] float duration = 1.0f;
 
+    [SerializeField] private GameObject FadeCanvasObj;
+
     private void OnEnable()
     {
         if (Instance == null)
@@ -16,8 +18,13 @@ public class ScreenFader : MonoBehaviour
             Destroy(gameObject);
 
     }
+    private void Awake()
+    {
+        FadeCanvasObj.SetActive(false);
+    }
     public void PlayFade()
     {
+        FadeCanvasObj.SetActive(true);
         StartCoroutine(FadeSequence());
     }
     private IEnumerator FadeOut()
@@ -54,6 +61,8 @@ public class ScreenFader : MonoBehaviour
         yield return StartCoroutine(FadeOut());
         yield return new WaitForSeconds(0.5f);
         yield return StartCoroutine(FadeIn());
+        yield return new WaitForSeconds(3f);
+        FadeCanvasObj.SetActive(false);
     }
     private void Update()
     {

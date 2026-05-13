@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,6 +84,7 @@ public class PlayerManager : MonoBehaviour
             IInteractable interactable = hit.collider.GetComponent<IInteractable>();
 
             interactable?.Interact();
+            currentInteractable = interactable;
         }
         
         // if we r holding smth then we drop

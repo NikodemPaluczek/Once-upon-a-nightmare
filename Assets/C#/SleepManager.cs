@@ -22,6 +22,13 @@ public class SleepManager : MonoBehaviour
         }
         OnSleepStateChanged += SwapObjects;
     }
+    private void Start()
+    {
+        foreach (GameObject awakeObj in awakeObjects)
+        {
+            awakeObj.SetActive(false);
+        }
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
