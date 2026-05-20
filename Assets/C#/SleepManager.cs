@@ -42,7 +42,7 @@ public class SleepManager : MonoBehaviour
     public static IEnumerator TriggerSleepState(bool isSleeping)
     {
         InputManager.Instance.DisableAllControls();
-        ScreenFader.Instance.PlayFade();
+        ScreenFader.Instance.PlayFade(1);
         yield return new WaitForSeconds(1);
         OnSleepStateChanged?.Invoke(isSleeping);
         yield return new WaitForSeconds(1); //we wait 1 sec cuz its the length of fade in and fade out
@@ -65,5 +65,23 @@ public class SleepManager : MonoBehaviour
             awakeObj.SetActive(!isSleeping);
         }
 
+    }
+
+    public void ChangeSleepStateWhiteFade()
+    {
+        _isSleeping = !_isSleeping;
+        StartCoroutine(TriggerSleepStateWhite(_isSleeping));
+    }
+    public static IEnumerator TriggerSleepStateWhite(bool isSleeping)
+    {
+        InputManager.Instance.DisableAllControls();
+        LightManager.instance.TurnOnLights();
+        yield return new WaitForSeconds(0.5f);
+        ScreenFader.Instance.PlayFade(2);
+
+        yield return new WaitForSeconds(1);
+        OnSleepStateChanged?.Invoke(isSleeping);
+        yield return new WaitForSeconds(1); //we wait 1 sec cuz its the length of fade in and fade out
+        InputManager.Instance.EnablePlayerControls();
     }
 }

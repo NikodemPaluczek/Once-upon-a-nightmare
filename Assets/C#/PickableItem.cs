@@ -40,6 +40,10 @@ public class PickableItem : MonoBehaviour, IPickableObject, IInteractable
     [SerializeField] private Transform holdPoint;
     [SerializeField] private Transform lookTarget;
 
+    private void Start()
+    {
+        targetRenderer.renderingLayerMask = _defaultMask | _outlineMask;
+    }
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -149,7 +153,7 @@ public class PickableItem : MonoBehaviour, IPickableObject, IInteractable
     private IEnumerator WaitforSeconds()
     {
         yield return new WaitForSeconds(1.8f); //we wait 1 sec cuz we want to show player dripping wax
-        SleepManager.Instance.ChangeSleepState();
+        SleepManager.Instance.ChangeSleepStateWhiteFade();
         yield return new WaitForSeconds(1); //fade out duration
         DropAfterSolving();
         PlayerManager.Instance.CurrentObject = null;
