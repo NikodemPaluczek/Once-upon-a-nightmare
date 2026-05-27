@@ -19,6 +19,10 @@ public class LightManager : MonoBehaviour
 
     [SerializeField] private GameObject jumpscareObject;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource tensionAudio;
+    [SerializeField] private float maxVolume = 1f;
+
     public static LightManager instance;
 
     private Coroutine countdownCoroutine;
@@ -28,6 +32,7 @@ public class LightManager : MonoBehaviour
     {
         SleepManager.OnSleepStateChanged += StartCountdown;
     }
+
     private void Awake()
     {
         instance = this;
@@ -44,6 +49,12 @@ public class LightManager : MonoBehaviour
                 lightSource.intensity = 0f;
                 lightSource.color = startColor;
             }
+        }
+
+        if (tensionAudio != null)
+        {
+            tensionAudio.volume = 0f;
+            tensionAudio.pitch = 1f;
         }
     }
 
@@ -93,6 +104,17 @@ public class LightManager : MonoBehaviour
             if (countdownCoroutine == null)
             {
                 countdownCoroutine = StartCoroutine(CountdownRoutine());
+
+                if (tensionAudio != null)
+                {
+                    tensionAudio.volume = 0f;
+                    tensionAudio.pitch = 1f;
+
+                    if (!tensionAudio.isPlaying)
+                    {
+                        tensionAudio.Play();
+                    }
+                }
             }
         }
         else
@@ -124,9 +146,33 @@ public class LightManager : MonoBehaviour
                 }
             }
 
+            if (tensionAudio != null)
+            {
+                tensionAudio.volume = Mathf.Lerp(
+                    0f,
+                    maxVolume,
+                    progress
+                );
+
+                if (!blinkingStarted)
+                {
+                    tensionAudio.pitch = Mathf.Lerp(
+                        1f,
+                        1.2f,
+                        progress
+                    );
+                }
+            }
+
             if (timer <= blinkStartTime && !blinkingStarted)
             {
                 blinkingStarted = true;
+
+                if (tensionAudio != null)
+                {
+                    tensionAudio.pitch = 2f;
+                }
+
                 blinkCoroutine = StartCoroutine(BlinkLights());
             }
 
@@ -184,6 +230,15 @@ public class LightManager : MonoBehaviour
         if (jumpscareObject != null)
         {
             jumpscareObject.SetActive(false);
+        }
+
+        // Reset audio
+        if (tensionAudio != null)
+        {
+            tensionAudio.Stop();
+
+            tensionAudio.volume = 0f;
+            tensionAudio.pitch = 1f;
         }
 
         ResetLights();
