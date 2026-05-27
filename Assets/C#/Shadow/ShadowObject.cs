@@ -14,8 +14,13 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
     [SerializeField] private Vector3 targetEuler;
     [SerializeField] private float tolerance = 10f;
 
+    [SerializeField] private float solveHoldTime = 2f;
+
+    private float _solveTimer;
+
     private bool _isPicked;
     private bool _canBeHighlighted = true;
+    private bool _solved;
 
     private uint _defaultLayerMask = 1u << 0;
     private uint _outlineLayerMask = 1u << 8;
@@ -54,7 +59,6 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
 
         transform.SetParent(point);
         transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
 
         _canBeHighlighted = false;
         Highlight(false);
@@ -70,11 +74,13 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
         _rb.useGravity = true;
 
         _canBeHighlighted = true;
+
+        _solveTimer = 0f;
     }
 
     public void Rotate(Vector2 input)
     {
-        if (!_isPicked) return;
+        if (!_isPicked || _solved) return;
 
         float rotX = input.y * rotationSpeed * Time.deltaTime;
         float rotY = -input.x * rotationSpeed * Time.deltaTime;
@@ -91,7 +97,12 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
         {
             Vector3 dir = lookTarget.position - camera.position;
             Quaternion rot = Quaternion.LookRotation(dir);
-            camera.rotation = Quaternion.Lerp(camera.rotation, rot, Time.deltaTime * 10f);
+
+            camera.rotation = Quaternion.Lerp(
+                camera.rotation,
+                rot,
+                Time.deltaTime * 10f
+            );
         }
     }
 
@@ -103,9 +114,24 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
         float dy = Mathf.Abs(Mathf.DeltaAngle(current.y, targetEuler.y));
         float dz = Mathf.Abs(Mathf.DeltaAngle(current.z, targetEuler.z));
 
-        if (dx <= tolerance && dy <= tolerance && dz <= tolerance)
+        bool withinTolerance =
+            dx <= tolerance &&
+            dy <= tolerance &&
+            dz <= tolerance;
+
+        if (withinTolerance)
         {
-            Solve();
+            _solveTimer += Time.deltaTime;
+
+            if (_solveTimer >= solveHoldTime)
+            {
+                _solved = true;
+                Solve();
+            }
+        }
+        else
+        {
+            _solveTimer = 0f;
         }
     }
 
@@ -114,8 +140,15 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
         OnDrop();
 
         PlayerManager.Instance.CurrentObject = null;
+
         InputManager.Instance.EnablePlayerControls();
+
         PlayerLocomotion.Instance.CameraLocked = false;
+
+        _canBeHighlighted = false;
+        targetRenderer.renderingLayerMask = _defaultLayerMask;
+
+        DoorManager.Instance.ShowNextObject();
     }
 
     public void Highlight(bool state)
@@ -124,7 +157,8 @@ public class ShadowObject : MonoBehaviour, IPickableObject, IInteractable
 
         if (state)
         {
-            targetRenderer.renderingLayerMask = _defaultLayerMask | _outlineLayerMask;
+            targetRenderer.renderingLayerMask =
+                _defaultLayerMask | _outlineLayerMask;
         }
         else
         {

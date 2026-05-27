@@ -20,7 +20,7 @@ public class GridFireplaceManager : MonoBehaviour
 
     private readonly int[] correctSequence = { 8, 0, 6 };
 
-    private bool interactionsEnabled = false;
+    public bool interactionsEnabled = false;
     private void Awake()
     {
         if (Instance == null) 
@@ -124,12 +124,18 @@ public class GridFireplaceManager : MonoBehaviour
             if (clickOrder[i] != correctSequence[i])
             {
                 ResetAll();
+
+                //tutaj wyłączamy grid i włączamy zagadkę na czas
+
+                SetInteractionsEnabled(true);
+                TimedLockPuzzleManager.Instance.StartPuzzle();
                 return;
             }
         }
 
         //git wygralismy
         placeholderWin.SetActive(true);
+        DoorManager.Instance.ShowNextObject();
     }
 
     private void ResetAll()
