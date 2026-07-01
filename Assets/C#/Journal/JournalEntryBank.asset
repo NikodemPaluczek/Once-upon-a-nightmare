@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafc23d87a364a340bc9853e8f8116b9, type: 3}
+  m_Name: JournalEntryBank
+  m_EditorClassIdentifier: 
+  entries:
+  - id: Candle
+    content: "In the realm of dreams, time itself seems to stand still, and evil
+      does not dare set foot within it. Reality is the opposite \u2014 there, every
+      passing moment works against me. If I wish to remain safe, I must remember
+      what allowed me to fall asleep.\r\n\r\nThis chamber is no ordinary prison.
+      I can feel that it hides secrets whose discovery may weaken the bonds of the
+      curse. If I unravel every mystery hidden within these walls, perhaps I will
+      find a way out."
+  - id: Rock
+    content: The pile of spinning wheels has fallen silent. Let the light of the
+      candle return darkness to it. To reduce the painted wood to ashes, you must
+      cast upon it an illusion of flames shaped from shadow and light.
+  - id: FirePlace
+    content: 'Follow the path carved by fate: from that which still breathes with
+      life, to that which bears authority, and finally to that which remains after
+      life has departed. Keep a proper distance between them, for even in dreams
+      they should never meet.'
+  - id: Cage
+    content: The two worlds breathe in opposite, mirrored rhythms. What remains trapped
+      in reality demands to be locked away within the dream. The symbol carved into
+      the unyielding metal of the waking world will reveal what you must seek on
+      the other side of the mirror.
+  - id: Raven
+    content: The witch's feathered messenger has abandoned the place where it belonged.
+      As long as its black wings obscure the light, the truth will remain hidden.
+      Return it to the place where it kept watch from the very beginning, and the
+      light shall dispel the shadow.
+  - id: Timelock
+    content: "When the princess fell into a deep sleep, two faithful attendants kept
+      watch by her bedside. On the first night, they waited for a miracle, but zero
+      came. They saw no signs from fate, so they dared to leave the chamber. Then
+      three ravens perched at the window and watched over the princess\u2019s sleep
+      for eternity."
